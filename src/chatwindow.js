@@ -36,7 +36,9 @@ componentDidMount()
 	}));
 	
 	
-	
+	 fetch('/users')
+      .then(res => res.json())
+      .then(users => this.setState({ users }));
 	
 	subscribeToTimer((err, timestamp) => this.setState({ 
     timestamp 
@@ -63,7 +65,7 @@ componentDidMount()
       <div className="w3-container">
 		your clock: {this.state.timestamp}<br/>
 		<div>
-		 your message is {this.state.message}
+		 your message is { this.state.users } {this.state.message}
 		</div>
 		<br/>
 		<input type="text" value={this.state.value} onChange={this.handleChange} />
