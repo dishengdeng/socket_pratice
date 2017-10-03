@@ -15,10 +15,12 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },
-  "proxy":{
-  "/":
-  {"target":"ws://localhost:8000/users",
-  "ws":true
-  }
-  } 
+  "proxy":
+  {
+    "/users":
+    {
+      "target":"http://localhost:8000"
+    }
+    }
+
 }

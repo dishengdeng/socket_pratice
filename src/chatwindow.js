@@ -8,23 +8,23 @@ export default class ChatWindow extends React.Component {
 constructor(props) {
   super(props);
 
-  
+
   	/*receviceMassge((err, message)=>this.setState({
 		message:message
 	}));*/
-	
+
   this.state = {
   timestamp: 'no timestamp yet',
   message : '',
   value: ''
- 
+
 }
 
 
 
  this.handleClick = this.handleClick.bind(this);
  this.handleChange = this.handleChange.bind(this);
-}	
+}
 
 componentDidMount()
 {
@@ -32,16 +32,22 @@ componentDidMount()
 	receviceMassge((err, sMessage)=>this.setState({
 
 		message:this.state.message+sMessage
-		
+
 	}));
-	
-	
+
+
 	 fetch('/users')
       .then(res => res.json())
-      .then(users => this.setState({ users }));
-	
-	subscribeToTimer((err, timestamp) => this.setState({ 
-    timestamp 
+      .then(data => this.setState({ users:data.data }));
+      //.then(function(data)
+    //{
+      //this.setState({ users }))
+      //console.log(data.data);
+
+    //});
+
+	subscribeToTimer((err, timestamp) => this.setState({
+    timestamp
   }));
 }
 
@@ -52,14 +58,14 @@ componentDidMount()
 		message:this.state.message + this.state.value
 	});
   }
-  
+
   handleChange(event) {
     this.setState({value: event.target.value
 		//message:this.state.message + event.target.value
 	});
-	
+
   }
-  
+
   render() {
     return (
       <div className="w3-container">
@@ -70,14 +76,10 @@ componentDidMount()
 		<br/>
 		<input type="text" value={this.state.value} onChange={this.handleChange} />
 		<br/>
-	<button onClick={this.handleClick}> 
+	<button onClick={this.handleClick}>
 		send
       </button>
       </div>
     );
   }
 }
-
-
-
-
