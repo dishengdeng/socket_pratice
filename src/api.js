@@ -20,4 +20,10 @@ function sendMassge(message)
 	socket.emit('send:message', message);
 }
 
-export { subscribeToTimer, receviceMassge, sendMassge}
+function receviceUserData(fn)
+{
+	console.log(' client recevie');
+	socket.on('update:userData', data => fn(null, data));
+}
+
+export { subscribeToTimer, receviceMassge, sendMassge, receviceUserData}

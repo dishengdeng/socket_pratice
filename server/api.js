@@ -1,5 +1,14 @@
 var fs = require('fs');
 
+var emitAll= function(io,data)
+{
+	//var clients=io.sockets.clients();
+	//for ( i = 0; i < clients.length; i++ ) {
+		console.log(data);
+    io.sockets.emit('update:userData', { data });
+	//);
+}
+
 var getUsers = function(app)
 {
 	app.get('/users', function(req, res){
@@ -38,8 +47,35 @@ var getData = function(app)
 
 }
 
-module.exports = function(app)
+var writeData = function(app,io)
+{
+	app.get('/update', function(req, res)
+	{
+			var fileName = './data.json';
+			var file = require(fileName);
+
+			file.name = "john";
+
+			fs.writeFile('./server/data.json', JSON.stringify(file), function (err) {
+			  if (err) return console.log(err);
+			  console.log(JSON.stringify(file));
+			  console.log('writing to ' + fileName);
+			  
+			  fs.readFile('./server/data.json',(err,result)=>{
+			  emitAll(io,JSON.stringify(result));}
+			  );
+			});
+			
+			
+
+	});
+
+
+}
+
+module.exports = function(app,io)
 {
 	getUsers(app);
 	getData(app);
+	writeData(app,io);
 }

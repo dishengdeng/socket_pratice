@@ -4,7 +4,7 @@ const port = 8000;
 const app = require('express')();
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
-const api = require('./api.js')(app);
+const api = require('./api.js')(app,io);
 
 
 //start web socket
