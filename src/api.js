@@ -15,6 +15,13 @@ function receviceMassge(fn)
 	socket.on('send:message', message => fn(null, message));
 }
 
+function receviceInitMassge(fn)
+{
+	
+	socket.on('send:init', messages => fn(null, messages));
+}
+
+
 function sendMassge(message)
 {
 	socket.emit('send:message', message);
@@ -23,7 +30,7 @@ function sendMassge(message)
 function receviceUserData(fn)
 {
 	console.log(' client recevie');
-	socket.on('update:userData', data => fn(null, data));
+	socket.on('update:userData', data=> fn(null, JSON.parse(data)));
 }
 
-export { subscribeToTimer, receviceMassge, sendMassge, receviceUserData}
+export { subscribeToTimer, receviceMassge, sendMassge, receviceUserData, receviceInitMassge}

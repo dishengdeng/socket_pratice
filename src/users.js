@@ -1,6 +1,6 @@
 import React from 'react';
 import './index.css';
-import { subscribeToTimer, receviceMassge, sendMassge, receviceUserData } from './api';
+import { receviceUserData } from './api';
 
 
 export default class Users extends React.Component {
@@ -19,18 +19,13 @@ constructor(props) {
 componentDidMount()
 {
 
-	//receviceUserData((err, sData)=>this.setState({
+	receviceUserData((err, sData)=>this.setState({
 
-		//users:sData
+	users:sData
 
-	//}));
+	}));
 	
-	receviceUserData(function(err, sData){
-		
-		//console.log(err);
-		
-		console.log(sData);
-	});
+
 
 
 	 fetch('/data')
@@ -55,7 +50,7 @@ componentDidMount()
 		
 		<div>
 		 <p>your name is { this.state.users.name }</p>
-		<p>your age is { this.state.users.Age }</p>		 
+		<p>your age is { this.state.users.age }</p>		 
 		</div>
 
       </div>

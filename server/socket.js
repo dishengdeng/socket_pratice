@@ -1,3 +1,5 @@
+var messages=[];
+
 var userNames = (function () {
   var names = {};
 
@@ -49,6 +51,8 @@ var userNames = (function () {
 
 module.exports = function (client) {
 	var guestName = userNames.getGuestName();
+
+	console.log(userNames.get());
    client.on('subscribeToTimer', (interval) => {
     console.log('client is subscribing to timer with interval ', interval);
 	    setInterval(() => {
@@ -58,11 +62,17 @@ module.exports = function (client) {
   
    client.on('send:message',(message)=>{
 	  console.log(message);
+	  
+	  messages.push(message);
 	  //client.emit('send:message',message);
 	
 	  client.broadcast.emit('send:message',message);
+	  	  client.emit('send:message',message);
 	  //client.emit('send:message',message+count);
 	  
   });
+  
+  client.emit('send:init',messages);
+  
 }
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import './index.css';
-import { subscribeToTimer, receviceMassge, sendMassge } from './api';
+import { subscribeToTimer, receviceMassge, sendMassge, receviceInitMassge } from './api';
 
 
 export default class ChatWindow extends React.Component {
@@ -14,8 +14,7 @@ constructor(props) {
 	}));*/
 
   this.state = {
-  timestamp: 'no timestamp yet',
-  message : '',
+  message : [],
   value: ''
 
 }
@@ -24,39 +23,44 @@ constructor(props) {
 
  this.handleClick = this.handleClick.bind(this);
  this.handleChange = this.handleChange.bind(this);
+ this.handleKeyPress = this.handleKeyPress.bind(this);
 }
 
 componentDidMount()
 {
+	var message=this.state.message;
+	
+	receviceInitMassge((err, sMessage)=>
+	{
+		message=sMessage;
+			this.setState({
+		message:sMessage
+	})
+	}
 
-	receviceMassge((err, sMessage)=>this.setState({
-
-		message:this.state.message+sMessage
-
-	}));
+	
+	);
+	
+	receviceMassge((err, sMessage)=>
+	{
+		
+		message.push(sMessage);
+		this.setState({
+			message
+		});
+	});
 
 
 	 fetch('/users')
       .then(res => res.json())
       .then(data => this.setState({ users:data.data }));
-      //.then(function(data)
-    //{
-      //this.setState({ users }))
-      //console.log(data.data);
 
-    //});
-
-	subscribeToTimer((err, timestamp) => this.setState({
-    timestamp
-  }));
 }
 
 	handleClick() {
 
 	sendMassge(this.state.value);
-	this.setState({
-		message:this.state.message + this.state.value
-	});
+
   }
 
   handleChange(event) {
@@ -65,21 +69,36 @@ componentDidMount()
 	});
 
   }
+  
+  handleKeyPress(event)
+  {
+	    if(event.key == 'Enter'){
+    sendMassge(this.state.value);
+  }
+  }
 
   render() {
+	 const vars=this.state.message;
+	 const messages =vars.map((number)=><p>{number}</p>);
     return (
-      <div className="w3-container">
-		your clock: {this.state.timestamp}<br/>
-		<div>
-		 your message is { this.state.users } {this.state.message}
-		</div>
-		<br/>
-		<input type="text" value={this.state.value} onChange={this.handleChange} />
-		<br/>
-	<button onClick={this.handleClick}>
+		
+	    <div className="col-xl-3 col-sm-6 mb-3">
+          <div className="card text-white bg-primary o-hidden h-100">
+            <div className="card-body" stype="overflow-y: scroll">
+
+              <div className="mr-5" >{messages}</div>
+            </div>
+            <a className="card-footer text-white clearfix small z-1" href="#">
+              <span className="float-left"><input type="text" value={this.state.value} onChange={this.handleChange} onKeyPress={this.handleKeyPress}/></span>
+              <span className="float-right">
+                	<button onClick={this.handleClick}>
 		send
       </button>
-      </div>
+              </span>
+            </a>
+          </div>
+        </div>
+     
     );
   }
 }
