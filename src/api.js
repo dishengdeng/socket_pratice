@@ -1,6 +1,6 @@
 import openSocket from 'socket.io-client';
 
-const socket = openSocket('http://localhost:8000');
+const socket = openSocket('http://172.18.88.47:8000');
 
 function subscribeToTimer(cb) {
 	console.log(cb);
@@ -33,4 +33,11 @@ function receviceUserData(fn)
 	socket.on('update:userData', data=> fn(null, JSON.parse(data)));
 }
 
-export { subscribeToTimer, receviceMassge, sendMassge, receviceUserData, receviceInitMassge}
+
+function receviceUserList(fn)
+{
+	
+	socket.on('send:userlist', data=> fn(null, data));
+}
+
+export { subscribeToTimer, receviceMassge, sendMassge, receviceUserData, receviceInitMassge, receviceUserList}

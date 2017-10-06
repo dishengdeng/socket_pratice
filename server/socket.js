@@ -49,7 +49,7 @@ var userNames = (function () {
   };
 }());
 
-module.exports = function (client) {
+module.exports = function (client,io) {
 	var guestName = userNames.getGuestName();
 
 	console.log(userNames.get());
@@ -64,15 +64,13 @@ module.exports = function (client) {
 	  console.log(message);
 	  
 	  messages.push(message);
-	  //client.emit('send:message',message);
-	
-	  client.broadcast.emit('send:message',message);
-	  	  client.emit('send:message',message);
-	  //client.emit('send:message',message+count);
+		  io.sockets.emit('send:message',messages);
+
 	  
   });
   
   client.emit('send:init',messages);
-  
+  //whole list of users
+  io.sockets.emit('send:userlist',userNames.get());
 }
 

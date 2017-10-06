@@ -1,6 +1,8 @@
 import React from 'react';
 import './index.css';
-import { subscribeToTimer, receviceMassge, sendMassge, receviceInitMassge } from './api';
+import { receviceMassge, sendMassge, receviceInitMassge } from './api';
+import MessageBox from './message.js';
+import Users from './users.js';
 
 
 export default class ChatWindow extends React.Component {
@@ -15,7 +17,20 @@ constructor(props) {
 
   this.state = {
   message : [],
-  value: ''
+  value: '',
+  messageScroll:()=>{
+	  	  	var messageBody = document.querySelector('#messageBody');
+		messageBody.scrollTo(0,messageBody.scrollHeight);
+
+  },
+  clearText:()=>
+  {
+	  	  	  
+				document.querySelector('#entertext').value='';
+	
+  }
+  
+ 
 
 }
 
@@ -28,17 +43,16 @@ constructor(props) {
 
 componentDidMount()
 {
-	var message=this.state.message;
 	
+	var message=this.state.message;
+
 	receviceInitMassge((err, sMessage)=>
 	{
 		message=sMessage;
 			this.setState({
 		message:sMessage
 	})
-	}
-
-	
+	}	
 	);
 	
 	receviceMassge((err, sMessage)=>
@@ -51,53 +65,94 @@ componentDidMount()
 	});
 
 
-	 fetch('/users')
-      .then(res => res.json())
-      .then(data => this.setState({ users:data.data }));
-
 }
 
 	handleClick() {
 
 	sendMassge(this.state.value);
+	this.state.clearText();
 
   }
 
   handleChange(event) {
     this.setState({value: event.target.value
-		//message:this.state.message + event.target.value
+
 	});
 
   }
+componentDidUpdate()
+{
+	this.state.messageScroll();
+	
+}
   
   handleKeyPress(event)
   {
-	    if(event.key == 'Enter'){
+	  
+	    if(event.key === 'Enter'){
     sendMassge(this.state.value);
+	this.state.clearText();
+	
   }
   }
 
   render() {
+	 
 	 const vars=this.state.message;
-	 const messages =vars.map((number)=><p>{number}</p>);
-    return (
-		
-	    <div className="col-xl-3 col-sm-6 mb-3">
-          <div className="card text-white bg-primary o-hidden h-100">
-            <div className="card-body" stype="overflow-y: scroll">
+	 console.log(vars);
+	 //const messages =vars.map((number)=><p>{number}</p>);
+	 const scrollbar={ 'overflow-y':'scroll',height:'400px' };
+    return (		
+	<div className="row">
+	<div className="col-sm-9">
+		<div className="panel panel-primary">
+      <div className="panel-heading">Wechat</div>
+      <div className="panel-body">
+	  <div className="row" style={scrollbar} id="messageBody">
 
-              <div className="mr-5" >{messages}</div>
-            </div>
-            <a className="card-footer text-white clearfix small z-1" href="#">
-              <span className="float-left"><input type="text" value={this.state.value} onChange={this.handleChange} onKeyPress={this.handleKeyPress}/></span>
-              <span className="float-right">
-                	<button onClick={this.handleClick}>
+		  <MessageBox data={vars}/>
+	  
+	  </div>
+	  
+	  <div className="row">
+	  
+	  
+	  <div className="col-sm-9">
+	  	  <input id="entertext" className="form-control" type="text" onChange={this.handleChange} onKeyPress={this.handleKeyPress}/>
+	  </div>
+	  
+	  
+	  <div className="col-sm-3">
+	  <button className="btn btn-primary btn-md" onClick={this.handleClick}>
 		send
       </button>
-              </span>
-            </a>
-          </div>
-        </div>
+	  </div>        
+
+              
+	  
+	  </div>
+	  
+
+	  </div>
+    </div>
+
+	</div>
+	
+	<div className="col-sm-3">
+	
+			<div className="panel panel-primary">
+      <div className="panel-heading">Users</div>
+      <div className="panel-body">
+	<Users />
+	  </div>
+	  </div>
+	
+	
+	
+	</div>
+
+	</div>
+
      
     );
   }

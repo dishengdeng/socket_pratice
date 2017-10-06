@@ -1,6 +1,6 @@
 import React from 'react';
 import './index.css';
-import { receviceUserData } from './api';
+import { receviceUserList } from './api';
 
 
 export default class Users extends React.Component {
@@ -8,7 +8,7 @@ export default class Users extends React.Component {
 constructor(props) {
   super(props);
   this.state = {
-  users: ''
+  users: []
 
 }
 }
@@ -18,41 +18,33 @@ constructor(props) {
 
 componentDidMount()
 {
-
-	receviceUserData((err, sData)=>this.setState({
+	
+	receviceUserList((err, sData)=>
+	{
+		
+		console.log(sData);
+	this.setState({
 
 	users:sData
 
-	}));
+	});
+	}
+
 	
-
-
-
-	 fetch('/data')
-      .then(res => res.json())
-      .then(data => this.setState({ users:data }));
-	 // .then(function(data)
-	  //{
-		  //this.setState({
-			 // users:data.data
-		 // });
-	 // });
-
-
+	);
 
 }
 
 
 
   render() {
+	var userlist=this.state.users;
+	const user =userlist.map((user)=><li>{user}</li>);
     return (
-      <div className="w3-container">
-		
-		<div>
-		 <p>your name is { this.state.users.name }</p>
-		<p>your age is { this.state.users.age }</p>		 
-		</div>
-
+      <div>
+		<ul>
+		{user}
+		</ul>
       </div>
     );
   }

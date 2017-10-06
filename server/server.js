@@ -9,7 +9,9 @@ const api = require('./api.js')(app,io);
 
 //start web socket
 var client = require('./socket.js');
-io.on('connection', client);
+io.on('connection', socket=>{
+	client(socket,io);
+});
 
 var server = http.listen(port, function () {
 
