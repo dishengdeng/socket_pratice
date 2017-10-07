@@ -1,4 +1,8 @@
-var messages=[];
+var userData={
+  "name":"",
+  "data":[]
+};
+
 
 var userNames = (function () {
   var names = {};
@@ -51,26 +55,22 @@ var userNames = (function () {
 
 module.exports = function (client,io) {
 	var guestName = userNames.getGuestName();
-
+userData.name=guestName;
 	console.log(userNames.get());
-   client.on('subscribeToTimer', (interval) => {
-    console.log('client is subscribing to timer with interval ', interval);
-	    setInterval(() => {
-      client.emit('timer', new Date());
-    }, interval);
-  });
-  
-   client.on('send:message',(message)=>{
-	  console.log(message);
-	  
-	  messages.push(message);
-		  io.sockets.emit('send:message',messages);
 
-	  
+
+   client.on('send:message',(data)=>{
+	  console.log(data);
+    userData.name=data.name;
+userData.data.push(data);
+	  console.log(userData);
+		  io.sockets.emit('send:message',userData);
+
+
   });
-  
-  client.emit('send:init',messages);
+
+  client.emit('send:init',userData);
   //whole list of users
+
   io.sockets.emit('send:userlist',userNames.get());
 }
-

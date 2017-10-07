@@ -7,14 +7,7 @@ export default class MessageBox extends React.Component {
 
 constructor(props) {
   super(props);
-this.state={
-	
-	  messageScroll:()=>{
-	  	  	var messageBody = document.querySelector('#messageBody');
-		messageBody.scrollTop = messageBody.scrollHeight - messageBody.clientHeight;
 
-  }
-}
 
 }
 
@@ -22,9 +15,9 @@ this.state={
 
  render() {
 
-	const vars=this.props.data;
+	const vars=this.props.data.data;
+console.log(vars);
 
-	
 	const card={
  width: 'auto',
   "box-shadow": '0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.19)',
@@ -34,15 +27,15 @@ this.state={
 };
 const style={"text-align": 'left',};
 
-const member =vars.map((number)=><div style={card}><p>{number}</p></div>);
+const member =vars.map((number)=><div style={card}><p>{number.data.userName}</p><p>{number.data.message}</p></div>);
 
     return (
 
-		
+
 		<div>
-		{member}		
+		{member}
 		</div>
-		
+
 
 
     );

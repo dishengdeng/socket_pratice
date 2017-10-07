@@ -1,12 +1,12 @@
 import openSocket from 'socket.io-client';
 
-const socket = openSocket('http://172.18.88.47:8000');
+const socket = openSocket('http://localhost:8000');
 
 function subscribeToTimer(cb) {
 	console.log(cb);
 	  socket.on('timer', timestamp => cb(null, timestamp));
   socket.emit('subscribeToTimer', 1000);
-} 
+}
 
 
 function receviceMassge(fn)
@@ -17,7 +17,7 @@ function receviceMassge(fn)
 
 function receviceInitMassge(fn)
 {
-	
+
 	socket.on('send:init', messages => fn(null, messages));
 }
 
@@ -36,7 +36,7 @@ function receviceUserData(fn)
 
 function receviceUserList(fn)
 {
-	
+
 	socket.on('send:userlist', data=> fn(null, data));
 }
 

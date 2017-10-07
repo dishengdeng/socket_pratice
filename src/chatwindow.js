@@ -16,21 +16,25 @@ constructor(props) {
 	}));*/
 
   this.state = {
-  message : [],
+  userData : {
+    "name":"",
+    "data":[]
+  },
   value: '',
   messageScroll:()=>{
 	  	  	var messageBody = document.querySelector('#messageBody');
-		messageBody.scrollTo(0,messageBody.scrollHeight);
+		//messageBody.scrollTo(0,messageBody.scrollHeight);
+    messageBody.scrollTop=messageBody.scrollHeight;
 
   },
   clearText:()=>
   {
-	  	  	  
+
 				document.querySelector('#entertext').value='';
-	
+
   }
-  
- 
+
+
 
 }
 
@@ -43,24 +47,24 @@ constructor(props) {
 
 componentDidMount()
 {
-	
-	var message=this.state.message;
 
-	receviceInitMassge((err, sMessage)=>
+	//var message=this.state.message;
+
+	receviceInitMassge((err, userData)=>
 	{
-		message=sMessage;
+		//message=sMessage;
 			this.setState({
-		message:sMessage
+		userData
 	})
-	}	
+	}
 	);
-	
-	receviceMassge((err, sMessage)=>
+
+	receviceMassge((err, userData)=>
 	{
-		
-		message.push(sMessage);
+
+		//message.push(sMessage);
 		this.setState({
-			message
+			userData
 		});
 	});
 
@@ -68,8 +72,16 @@ componentDidMount()
 }
 
 	handleClick() {
-
-	sendMassge(this.state.value);
+    var temp={
+      "name":"",
+      "data":{}
+    };
+    temp.name=this.state.userData.name;
+    temp.data={
+      "userName":this.state.userData.name,
+      "message":this.state.value
+    };
+	sendMassge(temp);
 	this.state.clearText();
 
   }
@@ -83,26 +95,35 @@ componentDidMount()
 componentDidUpdate()
 {
 	this.state.messageScroll();
-	
+
 }
-  
+
   handleKeyPress(event)
   {
-	  
+
 	    if(event.key === 'Enter'){
-    sendMassge(this.state.value);
+        var temp={
+          "name":"",
+          "data":{}
+        };
+        temp.name=this.state.userData.name;
+        temp.data={
+          "userName":this.state.userData.name,
+          "message":this.state.value
+        };
+    	sendMassge(temp);
 	this.state.clearText();
-	
+
   }
   }
 
   render() {
-	 
-	 const vars=this.state.message;
-	 console.log(vars);
+
+	 //const vars=this.state.userData;
+	 //console.log(vars);
 	 //const messages =vars.map((number)=><p>{number}</p>);
 	 const scrollbar={ 'overflow-y':'scroll',height:'400px' };
-    return (		
+    return (
 	<div className="row">
 	<div className="col-sm-9">
 		<div className="panel panel-primary">
@@ -110,50 +131,50 @@ componentDidUpdate()
       <div className="panel-body">
 	  <div className="row" style={scrollbar} id="messageBody">
 
-		  <MessageBox data={vars}/>
-	  
+		  <MessageBox data={this.state.userData}/>
+
 	  </div>
-	  
+
 	  <div className="row">
-	  
-	  
+
+
 	  <div className="col-sm-9">
 	  	  <input id="entertext" className="form-control" type="text" onChange={this.handleChange} onKeyPress={this.handleKeyPress}/>
 	  </div>
-	  
-	  
+
+
 	  <div className="col-sm-3">
 	  <button className="btn btn-primary btn-md" onClick={this.handleClick}>
 		send
       </button>
-	  </div>        
-
-              
-	  
 	  </div>
-	  
+
+
+
+	  </div>
+
 
 	  </div>
     </div>
 
 	</div>
-	
+
 	<div className="col-sm-3">
-	
+
 			<div className="panel panel-primary">
       <div className="panel-heading">Users</div>
       <div className="panel-body">
 	<Users />
 	  </div>
 	  </div>
-	
-	
-	
-	</div>
+
+
 
 	</div>
 
-     
+	</div>
+
+
     );
   }
 }
