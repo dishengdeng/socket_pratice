@@ -3,6 +3,7 @@ import './index.css';
 import { receviceMassge, sendMassge, receviceInitMassge } from './api';
 import MessageBox from './message.js';
 import Users from './users.js';
+import PopoutWindow from 'react-popout'
 
 
 export default class ChatWindow extends React.Component {
@@ -36,17 +37,21 @@ constructor(props) {
 
 
 
-}
 
+}
 
 
  this.handleClick = this.handleClick.bind(this);
  this.handleChange = this.handleChange.bind(this);
  this.handleKeyPress = this.handleKeyPress.bind(this);
+
 }
 
 componentDidMount()
 {
+
+
+
 
 	//var message=this.state.message;
 
@@ -71,12 +76,15 @@ componentDidMount()
     temp.data=data
 		this.setState({
 			userData:temp
-		});
+		});		
+
 	});
 
 
 }
 
+
+	
 	handleClick() {
     var temp={
       "name":"",
@@ -101,6 +109,8 @@ componentDidMount()
 componentDidUpdate()
 {
 	this.state.messageScroll();
+
+
 
 }
 
@@ -129,6 +139,9 @@ componentDidUpdate()
 	 //console.log(vars);
 	 //const messages =vars.map((number)=><p>{number}</p>);
 	 const scrollbar={ 'overflow-y':'scroll',height:'400px' };
+	 
+
+
     return (
 	<div className="row">
 	<div className="col-sm-9">
@@ -173,11 +186,13 @@ componentDidUpdate()
 	<Users />
 	  </div>
 	  </div>
-
-
-
 	</div>
+	<div>
 
+
+	
+	
+	</div>
 	</div>
 
 

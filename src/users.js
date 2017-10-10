@@ -81,7 +81,7 @@ handleChange(event) {
 
 
   <div className="row">
-      <div className="col-sm-9">
+      <div className="col-sm-7">
           <input id="enterUseName" className="form-control" type="text" onChange={this.handleChange}/>
       </div>
 
