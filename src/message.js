@@ -27,7 +27,7 @@ console.log(vars);
 };
 const style={"text-align": 'left',};
 
-const member =vars.map((number)=><div style={card}><p>{number.data.userName}</p><p>{number.data.message}</p></div>);
+const member =vars.map((number)=><div style={card}><p><h4>{number.data.userName}:</h4></p><p>{number.data.message}</p></div>);
 
     return (
 

@@ -5,71 +5,157 @@ var userData={
 
 
 var userNames = (function () {
-  var names = {};
+  var names = [];
 
   var claim = function (name) {
-    if (!name || names[name]) {
-      return false;
-    } else {
-      names[name] = true;
-      return true;
+    var result=true;
+    if(!name)
+    {
+      result=false;
     }
+    else {
+      for(var user in names)
+      {
+
+        if(names[user].name==name)
+        {
+
+          result=false;
+        }
+
+      }
+    }
+
+    return result;
+
   };
 
   // find the lowest unused "guest" name and claim it
-  var getGuestName = function () {
-    var name,
-      nextUserId = 1;
+  var getGuestName = function (socket) {
 
-    do {
+    var name,nextUserId=1;
+
+
+
+    if(names.length==0)
+    {
       name = 'Guest ' + nextUserId;
-      nextUserId += 1;
-    } while (!claim(name));
+      names.push({"name":name,"socketID":socket.id});
+    }
+    else {
+      var check=true;
+
+      while(check)
+    {
+
+        name = 'Guest ' + nextUserId;
+        if(claim(name))
+        {
+          names.push({"name":name,"socketID":socket.id});
+
+          check=false;
+        }
+        nextUserId += 1;
+
+
+      }
+
+
+
+
+    }
+
+
+
+
 
     return name;
   };
 
+  var changeName=function(data)
+  {
+      for(var user in names)
+      {
+          if(names[user].socketID==data.socketID)
+          {
+              names[user].name=data.name;
+          }
+      }
+  }
   // serialize claimed names as an array
   var get = function () {
-    var res = [];
-    for (user in names) {
-      res.push(user);
-    }
+    return names;
 
-    return res;
   };
 
   var free = function (name) {
-    if (names[name]) {
-      delete names[name];
-    }
+
+    names.splice(name,1);
   };
 
   return {
     claim: claim,
     free: free,
     get: get,
-    getGuestName: getGuestName
+    getGuestName: getGuestName,
+    changeName:changeName
   };
 }());
 
 module.exports = function (client,io) {
-	var guestName = userNames.getGuestName();
+
+	var guestName = userNames.getGuestName(client);
 userData.name=guestName;
-	console.log(userNames.get());
+
+
+
+	console.log("userlist: " +JSON.stringify(userNames.get()));
 
 
    client.on('send:message',(data)=>{
-	  console.log(data);
-    userData.name=data.name;
-userData.data.push(data);
-	  console.log(userData);
-		  io.sockets.emit('send:message',userData);
+	  console.log("user send message: "+JSON.stringify(data));
+    //userData.name=data.name;
+    userData.data.push(data);
+
+		  io.sockets.emit('send:message',userData.data);
 
 
   });
 
+  client.on('send:changeName',(data)=>{
+   var result=false;
+   console.log("changing user: " + JSON.stringify(data));
+   if (userNames.claim(data.name)) {
+
+
+     userData.name=data.name;
+     userNames.changeName(data);
+     client.emit('send:init',userData);
+     io.sockets.emit('send:userlist',userNames.get());
+
+     result=true;
+   } else {
+     result=false;
+   }
+  client.emit('send:changeName',result);
+
+ });
+
   client.emit('send:init',userData);
+
+  client.on('disconnect',function(){
+    var sockets=userNames.get();
+    for(var user in sockets)
+    {
+      if(sockets[user].socketID==client.id)
+      {
+        console.log("userleft: "+sockets[user].name);
+
+        userNames.free(user);
+      }
+    }
+    io.sockets.emit('send:userlist',userNames.get());
+  });
   //whole list of users
 
   io.sockets.emit('send:userlist',userNames.get());

@@ -53,18 +53,24 @@ componentDidMount()
 	receviceInitMassge((err, userData)=>
 	{
 		//message=sMessage;
+    console.log(userData);
 			this.setState({
 		userData
 	})
 	}
 	);
 
-	receviceMassge((err, userData)=>
+	receviceMassge((err, data)=>
 	{
 
-		//message.push(sMessage);
+    var temp={
+      "name":"",
+      "data":[]
+    };
+    temp.name=this.state.userData.name;
+    temp.data=data
 		this.setState({
-			userData
+			userData:temp
 		});
 	});
 
@@ -126,7 +132,7 @@ componentDidUpdate()
     return (
 	<div className="row">
 	<div className="col-sm-9">
-		<div className="panel panel-primary">
+		<div className="panel panel-default">
       <div className="panel-heading">Wechat</div>
       <div className="panel-body">
 	  <div className="row" style={scrollbar} id="messageBody">
@@ -144,7 +150,7 @@ componentDidUpdate()
 
 
 	  <div className="col-sm-3">
-	  <button className="btn btn-primary btn-md" onClick={this.handleClick}>
+	  <button className="btn btn-default btn-md" onClick={this.handleClick}>
 		send
       </button>
 	  </div>
@@ -161,7 +167,7 @@ componentDidUpdate()
 
 	<div className="col-sm-3">
 
-			<div className="panel panel-primary">
+			<div className="panel panel-default">
       <div className="panel-heading">Users</div>
       <div className="panel-body">
 	<Users />

@@ -40,4 +40,16 @@ function receviceUserList(fn)
 	socket.on('send:userlist', data=> fn(null, data));
 }
 
-export { subscribeToTimer, receviceMassge, sendMassge, receviceUserData, receviceInitMassge, receviceUserList}
+function receviceNameChange(fn)
+{
+
+	socket.on('send:changeName', data=>fn(data));
+}
+
+function updateName(data)
+{
+	console.log("client send: "+socket.id);
+	socket.emit('send:changeName', {"name":data,"socketID":socket.id});
+}
+
+export { subscribeToTimer, receviceMassge, sendMassge, receviceUserData, receviceInitMassge, receviceUserList, receviceNameChange, updateName}
