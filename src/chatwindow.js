@@ -3,7 +3,7 @@ import './index.css';
 import { receviceMassge, sendMassge, receviceInitMassge } from './api';
 import MessageBox from './message.js';
 import Users from './users.js';
-import PopoutWindow from 'react-popout'
+import moment from 'moment';
 
 
 export default class ChatWindow extends React.Component {
@@ -93,7 +93,8 @@ componentDidMount()
     temp.name=this.state.userData.name;
     temp.data={
       "userName":this.state.userData.name,
-      "message":this.state.value
+      "message":this.state.value,
+	  "time":moment().format("MMM-DD-YYYY HH:mm:ss")
     };
 	sendMassge(temp);
 	this.state.clearText();
@@ -116,7 +117,7 @@ componentDidUpdate()
 
   handleKeyPress(event)
   {
-
+		
 	    if(event.key === 'Enter'){
         var temp={
           "name":"",
@@ -125,7 +126,8 @@ componentDidUpdate()
         temp.name=this.state.userData.name;
         temp.data={
           "userName":this.state.userData.name,
-          "message":this.state.value
+          "message":this.state.value,
+		  "time":moment().format("MMM-DD-YYYY HH:mm:ss")
         };
     	sendMassge(temp);
 	this.state.clearText();
@@ -138,62 +140,50 @@ componentDidUpdate()
 	 //const vars=this.state.userData;
 	 //console.log(vars);
 	 //const messages =vars.map((number)=><p>{number}</p>);
-	 const scrollbar={ 'overflow-y':'scroll',height:'400px' };
-	 
+	 //const scrollbar={ 'overflow-y':'scroll',height:'400px' };
+
 
 
     return (
-	<div className="row">
-	<div className="col-sm-9">
-		<div className="panel panel-default">
-      <div className="panel-heading">Wechat</div>
-      <div className="panel-body">
-	  <div className="row" style={scrollbar} id="messageBody">
 
-		  <MessageBox data={this.state.userData}/>
+				<div className="row">
+					<div className="col-xs-9 col-md-9">
+						<div className="panel panel-default">
+							<div className="panel-heading top-bar">
+								<div className="col-md-8 col-xs-8">
+									<h3 className="panel-title"><span className="glyphicon glyphicon-comment"></span> wechat</h3>
+								</div>
 
-	  </div>
+							</div>
+							<div id="messageBody" className="panel-body msg_container_base">
+							   <MessageBox data={this.state.userData}/>
+							</div>
+							<div className="panel-footer">
+								<div className="input-group">
+									<input id="entertext"  type="text" className="form-control input-sm chat_input" placeholder="Write your message here..." onChange={this.handleChange} onKeyPress={this.handleKeyPress} />
+									<span className="input-group-btn">
+									<button className="btn btn-primary btn-sm" onClick={this.handleClick}>Send</button>
+									</span>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div className="col-xs-3 col-md-3">
+						<div className="panel panel-default">
+							<div className="panel-heading">
+								Users
+							</div>
+							<div className="panel-body">
+								<Users />
+							</div>
+						</div>
+						
+					</div>
+				</div>
+			
+				
+				
 
-	  <div className="row">
-
-
-	  <div className="col-sm-9">
-	  	  <input id="entertext" className="form-control" type="text" onChange={this.handleChange} onKeyPress={this.handleKeyPress}/>
-	  </div>
-
-
-	  <div className="col-sm-3">
-	  <button className="btn btn-default btn-md" onClick={this.handleClick}>
-		send
-      </button>
-	  </div>
-
-
-
-	  </div>
-
-
-	  </div>
-    </div>
-
-	</div>
-
-	<div className="col-sm-3">
-
-			<div className="panel panel-default">
-      <div className="panel-heading">Users</div>
-      <div className="panel-body">
-	<Users />
-	  </div>
-	  </div>
-	</div>
-	<div>
-
-
-	
-	
-	</div>
-	</div>
 
 
     );
