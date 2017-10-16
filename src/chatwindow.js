@@ -109,7 +109,7 @@ componentDidMount()
   }
 componentDidUpdate()
 {
-	this.state.messageScroll();
+	//this.state.messageScroll();
 
 
 
@@ -162,7 +162,7 @@ componentDidUpdate()
 								<div className="input-group">
 									<input id="entertext"  type="text" className="form-control input-sm chat_input" placeholder="Write your message here..." onChange={this.handleChange} onKeyPress={this.handleKeyPress} />
 									<span className="input-group-btn">
-									<button className="btn btn-primary btn-sm" onClick={this.handleClick}>Send</button>
+									<button id="btnsend" className="btn btn-primary btn-sm" onClick={this.handleClick}>Send</button>
 									</span>
 								</div>
 							</div>
