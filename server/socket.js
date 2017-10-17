@@ -1,5 +1,6 @@
-var userData={
+userData={
   "name":"",
+  "imageUrl":"",
   "data":[]
 };
 

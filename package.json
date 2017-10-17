@@ -3,8 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "body-parser": "^1.18.2",
+    "busboy": "^0.2.14",
+    "express-fileupload": "^0.3.0",
     "jsonfile": "^4.0.0",
     "moment": "^2.19.1",
+    "multer": "^1.3.0",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
     "react-images-upload": "^1.1.1",
@@ -25,6 +29,9 @@
       "target": "http://localhost:8000"
     },
     "/data": {
+      "target": "http://localhost:8000"
+    },
+    "/uploadImage": {
       "target": "http://localhost:8000"
     }
   }

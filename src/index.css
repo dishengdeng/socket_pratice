@@ -42,7 +42,7 @@ div.body {
     overflow: hidden;
 }
 
-//-----
+
 .col-md-2, .col-md-10, .col-xs-10{
     padding:0;
 }
@@ -177,3 +177,5 @@ img {
 {
 	z-index:0;
 }
+/*import awesome font style*/
+@import "font-awesome-4.7.0/css/font-awesome.min.css"

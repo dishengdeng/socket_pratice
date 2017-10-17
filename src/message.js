@@ -20,11 +20,13 @@ constructor(props) {
   modalIsOpen: false
   }
  this.onDrop = this.onDrop.bind(this);
- this.handleClick = this.handleClick.bind(this);
+ this.uploadImage = this.uploadImage.bind(this);
  this.openModal = this.openModal.bind(this);
  this.afterOpenModal = this.afterOpenModal.bind(this);
  this.closeModal = this.closeModal.bind(this);
+
 }
+
   openModal() {
     this.setState({modalIsOpen: true});
   }
@@ -38,10 +40,28 @@ constructor(props) {
     this.setState({modalIsOpen: false,pictures: []});
 
   }
-handleClick(e)
-{	
-	
+uploadImage(e)
+{	console.log(this.state.pictures[0][0]);	
+			
+	var data = new FormData();
+	data.append('image', this.state.pictures[0][0]);
+	data.append('name', this.props.data.name);
+	fetch('/uploadImage', {
+			method: 'post',
+			body: data
+			}).then(function(response) {
+				
+				return response.json();
 
+	
+			}).then(function(json){
+				
+				console.log(json);
+				
+			}).catch(function(err) {
+				
+			});
+	e.preventDefault();
 }
 
 
@@ -63,8 +83,10 @@ componentDidUpdate()
 
 	const vars=this.props.data.data;
 console.log(this.props.data.name);
+
 const style={"cursor":"pointer"};
 const btnstyle={"left":"45%"};
+const afStyle={"font-size":"20px","float":"right","cursor":"pointer"};
 const customStyles = {
   content : {
     top                   : '50%',
@@ -92,7 +114,7 @@ const member =vars.map((number)=>
 						</div>
 					</div>
 					<div className="col-md-2 col-xs-2 avatar">
-						<img src={ ImageUrl } style={ style } className=" img-responsive " onClick={this.openModal} alt="test"/>
+						<img src={this.props.data.imageUrl} style={ style } className=" img-responsive " onClick={this.openModal} alt="test"/>
 
 					</div>
 				</div>;
@@ -124,6 +146,7 @@ const member =vars.map((number)=>
 
 		<div>
 		{member}
+
 		
 		<Modal
           isOpen={this.state.modalIsOpen}
@@ -132,9 +155,12 @@ const member =vars.map((number)=>
           style={customStyles}
           contentLabel="Example Modal"
         >
+
+		<i className="fa fa-window-close-o" style={ afStyle } aria-hidden="true" onClick={this.closeModal}></i>
+
  <ImageUploader  withIcon={true} buttonText='Choose images' onChange={this.onDrop} imgExtension={['.jpg', '.gif', '.png', '.gif']} maxFileSize={5242880}/>
 		<span className="input-group-btn">
-		<button className="btn btn-info btn-sm" style= { btnstyle } onClick={this.handleClick}>upload</button>
+		<button className="btn btn-info btn-sm" style= { btnstyle } onClick={this.uploadImage}>upload</button>
 		</span>
         </Modal>		
 
