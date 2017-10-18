@@ -3,7 +3,8 @@ import './index.css';
 //import ImageUrl from './images/add-user.png';
 import ImageUploader from 'react-images-upload';
 import Modal from 'react-modal';
-import { apiUrl } from './constants.js';
+import { UrlImage } from './constants.js';
+import './font-awesome-animation.min.css';
 
 
 
@@ -18,7 +19,8 @@ constructor(props) {
     messageBody.scrollTop=messageBody.scrollHeight;
 
   },
-  modalIsOpen: false
+  modalIsOpen: false,
+  isUploading:false
   }
  this.onDrop = this.onDrop.bind(this);
  this.uploadImage = this.uploadImage.bind(this);
@@ -42,23 +44,22 @@ constructor(props) {
 
   }
 uploadImage(e)
-{	console.log(this.state.pictures[0][0]);
-
+{	
+	if(this.state.pictures.length===0)
+	{
+		e.preventDefault();
+		return;
+		
+	}
+	this.setState({isUploading:true});
 	var data = new FormData();
 	data.append('image', this.state.pictures[0][0]);
 	data.append('name', this.props.data.name);
 	fetch('/uploadImage', {
 			method: 'post',
 			body: data
-			}).then(function(response) {
-
-				return response.json();
-
-
-			}).then(function(json){
-
-				console.log(json);
-
+			}).then((response)=>{
+				if(response.status===200) {this.closeModal();this.setState({isUploading:false});}
 			}).catch(function(err) {
 
 			});
@@ -83,11 +84,12 @@ componentDidUpdate()
  render() {
 
 	const vars=this.props.data.data;
-const ImageUrl=apiUrl+"/image/common/add-user.png";
-
-const style={"cursor":"pointer"};
+const ImageUrl=UrlImage+"image/common/add-user.png";
+const ImageFrame={"width":"50px"};
+const style={"cursor":"pointer","margin":"0"};
 const btnstyle={"left":"45%"};
 const afStyle={"font-size":"20px","float":"right","cursor":"pointer"};
+
 const customStyles = {
   content : {
     top                   : '50%',
@@ -117,7 +119,7 @@ console.log("hello from "+getImageUrlforSent());
 							<time datetime="2009-11-13T20:00">{number.userName} • {number.time}</time>
 						</div>
 					</div>
-					<div className="col-md-2 col-xs-2 avatar">
+					<div style={ ImageFrame } className="col-md-2 col-xs-2 avatar">
 						<img src={getImageUrlforSent()}
             style={ style }
             className=" img-responsive "
@@ -131,7 +133,7 @@ console.log("hello from "+getImageUrlforSent());
 
 
 				return <div className="row msg_container base_receive">
-					<div className="col-md-2 col-xs-2 avatar">
+					<div style={ ImageFrame } className="col-md-2 col-xs-2 avatar">
 						<img src={getImageUrlforReceive()} className=" img-responsive " alt="test"/>
 					</div>
 					<div className="col-md-10 col-xs-10">
@@ -154,7 +156,7 @@ console.log("hello from "+getImageUrlforSent());
 		<div>
 		{member}
 
-
+		
 		<Modal
           isOpen={this.state.modalIsOpen}
           onAfterOpen={this.afterOpenModal}
@@ -167,7 +169,7 @@ console.log("hello from "+getImageUrlforSent());
 
  <ImageUploader  withIcon={true} buttonText='Choose images' onChange={this.onDrop} imgExtension={['.jpg', '.gif', '.png', '.gif']} maxFileSize={5242880}/>
 		<span className="input-group-btn">
-		<button className="btn btn-info btn-sm" style= { btnstyle } onClick={this.uploadImage}>upload</button>
+		<button className="btn btn-info btn-sm" style= { btnstyle } onClick={this.uploadImage}>{this.state.isUploading ? <i className="fa fa-spinner faa-spin animated"></i>:'Upload'}</button>
 		</span>
         </Modal>
 

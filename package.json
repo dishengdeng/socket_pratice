@@ -33,6 +33,9 @@
     },
     "/uploadImage": {
       "target": "http://localhost:8000"
+    },
+	 "/image": {
+      "target": "http://localhost:8000"
     }
   }
 }

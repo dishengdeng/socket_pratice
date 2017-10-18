@@ -4,7 +4,7 @@ const fileUpload = require('express-fileupload');
 var bodyParser = require('body-parser');
 //var upload = multer({ dest: 'uploads/' });
 const ImageUrl="./client/userImages/";
-const host="http://localhost:8000/";
+const host="http://172.18.88.204/";
 
 var emitAll= function(io,data)
 {
