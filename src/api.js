@@ -1,6 +1,7 @@
 import openSocket from 'socket.io-client';
+import { apiUrl } from './constants.js';
 
-const socket = openSocket('http://m414605:8000');
+const socket = openSocket(apiUrl);
 
 function subscribeToTimer(cb) {
 	console.log(cb);
@@ -52,4 +53,10 @@ function updateName(data)
 	socket.emit('send:changeName', {"name":data,"socketID":socket.id});
 }
 
-export { subscribeToTimer, receviceMassge, sendMassge, receviceUserData, receviceInitMassge, receviceUserList, receviceNameChange, updateName}
+function receviceImageUrl(fn)
+{
+
+	socket.on('send:userImageUrl', data=>fn(data));
+}
+
+export { subscribeToTimer, receviceMassge, sendMassge, receviceUserData, receviceInitMassge, receviceUserList, receviceNameChange, updateName, receviceImageUrl}

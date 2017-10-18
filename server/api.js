@@ -30,7 +30,7 @@ var getData = function(app)
 	{
 		fs.readFile('./server/data.json',(err,result)=>
 		{
-				
+
 				if(err)
 				{
 				res.statusCode=404;
@@ -73,8 +73,8 @@ var writeData = function(app,io)
 			  emitAll(io,result);}
 			  );
 			});
-			
-			
+
+
 
 	});
 
@@ -94,20 +94,20 @@ var getUserImage = function(app)
 					//res.send("ok");
 					//console.log(result);
 			//} );
-		 var readStream = fs.createReadStream(ImageUrl+decodeURI(req.params.name)+"/"+decodeURI(req.params.fileName));	
+		 var readStream = fs.createReadStream(ImageUrl+decodeURI(req.params.name)+"/"+decodeURI(req.params.fileName));
 		readStream.pipe(res);
-			
+
 	});
 }
 
 var uploadProfileImage = function(app,io)
 {
 	app.use(fileUpload({
-		
+
 		limits: { fileSize: 50 * 1024 * 1024 }
 	}));
 		// parse application/x-www-form-urlencoded
-	
+
 	app.use(bodyParser.urlencoded({ extended: false,limit: '50mb',parameterLimit: 1000000 }));
 
 	// parse application/json
@@ -119,8 +119,8 @@ var uploadProfileImage = function(app,io)
 			console.log(req.files);
 			console.log(req.body);
 			console.log(userData);
-			
-			
+
+
 			  if (!req.files)
 				return res.status(400).send('No files were uploaded.');
 			if(!fs.existsSync(ImageUrl+req.body.name))
@@ -128,7 +128,7 @@ var uploadProfileImage = function(app,io)
 				fs.mkdirSync(ImageUrl+req.body.name);
 			}
 			let img = req.files.image;
-			
+
 			img.mv(ImageUrl+req.body.name+"/"+img.name,function(err)
 			{
 				    if (err)
@@ -140,13 +140,26 @@ var uploadProfileImage = function(app,io)
 			 		res.statusCode=200;
 					res.setHeader('Content-Type','application/json');
 					res.send({"message":"ok"});
-					
-					userData["imageUrl"]=host+"image/"+req.body.name+"/"+img.name;
-					io.emit('send:init',userData);
-					
+
+
+					//var tempUserData=userData;
+					//tempUserData.name=req.body.name;
+					//tempUserData.["imageUrl"]=host+"image/"+req.body.name+"/"+img.name;
+					for(var index in userData.data)
+					{
+						console.log("updating images---");
+							if(userData.data[index].userName===req.body.name)
+							{
+								userData.data[index]["imageUrl"]=host+"image/"+req.body.name+"/"+img.name;
+							}
+
+					}
+					io.sockets.emit('send:message',userData.data);
+					io.sockets.emit('send:userImageUrl',{"name":req.body.name,"imageUrl":host+"image/"+req.body.name+"/"+img.name});
+
 			}
 			);
-		
+
 	});
 }
 

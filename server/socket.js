@@ -1,6 +1,5 @@
 userData={
   "name":"",
-  "imageUrl":"",
   "data":[]
 };
 

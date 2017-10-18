@@ -1,6 +1,6 @@
 import React from 'react';
 import './index.css';
-import { receviceMassge, sendMassge, receviceInitMassge } from './api';
+import { receviceMassge, sendMassge, receviceInitMassge, receviceImageUrl } from './api';
 import MessageBox from './message.js';
 import Users from './users.js';
 import moment from 'moment';
@@ -21,6 +21,7 @@ constructor(props) {
     "name":"",
     "data":[]
   },
+  imageUrl:"",
   value: '',
   messageScroll:()=>{
 	  	  	var messageBody = document.querySelector('#messageBody');
@@ -76,15 +77,25 @@ componentDidMount()
     temp.data=data
 		this.setState({
 			userData:temp
-		});		
+		});
 
 	});
+
+  receviceImageUrl((data)=>{
+    if(this.state.userData.name===data.name)
+    {
+      this.setState({
+          imageUrl:data.imageUrl
+      });
+    }
+  });
+
 
 
 }
 
 
-	
+
 	handleClick() {
     var temp={
       "name":"",
@@ -94,9 +105,10 @@ componentDidMount()
     temp.data={
       "userName":this.state.userData.name,
       "message":this.state.value,
-	  "time":moment().format("MMM-DD-YYYY HH:mm:ss")
+	  "time":moment().format("MMM-DD-YYYY HH:mm:ss"),
+    "imageUrl":this.state.imageUrl
     };
-	sendMassge(temp);
+	sendMassge(temp.data);
 	this.state.clearText();
 
   }
@@ -117,7 +129,7 @@ componentDidUpdate()
 
   handleKeyPress(event)
   {
-		
+
 	    if(event.key === 'Enter'){
         var temp={
           "name":"",
@@ -127,9 +139,10 @@ componentDidUpdate()
         temp.data={
           "userName":this.state.userData.name,
           "message":this.state.value,
-		  "time":moment().format("MMM-DD-YYYY HH:mm:ss")
+		  "time":moment().format("MMM-DD-YYYY HH:mm:ss"),
+      "imageUrl":this.state.imageUrl
         };
-    	sendMassge(temp);
+    	sendMassge(temp.data);
 	this.state.clearText();
 
   }
@@ -177,12 +190,12 @@ componentDidUpdate()
 								<Users />
 							</div>
 						</div>
-						
+
 					</div>
 				</div>
-			
-				
-				
+
+
+
 
 
 
