@@ -2,10 +2,10 @@ userData={
   "name":"",
   "data":[]
 };
-
+names = [];
 
 var userNames = (function () {
-  var names = [];
+  
 
   var claim = function (name) {
     var result=true;

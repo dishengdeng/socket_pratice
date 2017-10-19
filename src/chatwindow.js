@@ -184,7 +184,7 @@ componentDidUpdate()
 					<div className="col-xs-3 col-md-3">
 						<div className="panel panel-default">
 							<div className="panel-heading">
-								Users
+								<i className="fa fa-address-card" aria-hidden="true"></i> Users
 							</div>
 							<div className="panel-body">
 								<Users />

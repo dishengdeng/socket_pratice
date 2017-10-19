@@ -70,14 +70,39 @@ handleChange(event) {
 
   render() {
 	var userlist=this.state.users;
-	const user =userlist.map((user)=><li>{user.name}</li>);
+	const borderStyle={'border-top': '2px solid ghostwhite',
+						'border-bottom': '2px solid ghostwhite',
+						"margin-left":"5px","margin-right":"5px"};
+	const rowStyle={"margin-bottom":"10px"};
+	const imageStyle={"height":"50px","width":"50px"};
+	const wrapDiv={"display":"inline-block","padding-top":"2px"};
+	const divStyle={"float:":"right","height":"25px"};
+	const user =userlist.map((user)=>
+	<div className="row" style={ rowStyle }>
+
+		<div style={borderStyle}>
+			<div style={ wrapDiv }>
+				<img style={ imageStyle } src="http://www.bitrebels.com/wp-content/uploads/2011/02/Original-Facebook-Geek-Profile-Avatar-1.jpg" className=" img-responsive " alt="test"/>
+			</div>
+			<div style={ wrapDiv }>
+				<div style={divStyle}>
+					{user.name}	
+				</div>
+				<div style={divStyle}>
+					test
+				</div>			
+			</div>
+		</div>
+
+
+			
+
+	</div>);
     return (
 <div>
-  <div className="row">
-    <ul>
+
     {user}
-    </ul>
-  </div>
+
 
 
   <div className="row">
