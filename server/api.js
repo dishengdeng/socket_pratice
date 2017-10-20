@@ -156,6 +156,22 @@ var uploadProfileImage = function(app,io)
 					}
 					io.sockets.emit('send:message',userData.data);
 					io.sockets.emit('send:userImageUrl',{"name":req.body.name,"imageUrl":host+"image/"+req.body.name+"/"+img.name});
+					userHeader.name=req.body.name;
+					userHeader.imageUrl=host+"image/"+req.body.name+"/"+img.name;
+								
+					io.sockets.emit('send:userHeader',userHeader);
+					
+					for(var index in names)
+					{
+						console.log("updating user list images---");
+						console.log(index);
+						if(names[index].name===req.body.name)
+						{
+							names[index]["imageUrl"]=host+"image/"+req.body.name+"/"+img.name;
+						}
+					}
+					console.log(names);
+					io.sockets.emit('send:userlist',names);
 
 			}
 			);

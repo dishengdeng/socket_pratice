@@ -3,6 +3,7 @@ userData={
   "data":[]
 };
 names = [];
+userHeader={};
 
 var userNames = (function () {
   
@@ -79,6 +80,7 @@ var userNames = (function () {
           if(names[user].socketID==data.socketID)
           {
               names[user].name=data.name;
+			  names["imageUrl"]=data.imageUrl
           }
       }
   }
@@ -107,7 +109,10 @@ module.exports = function (client,io) {
 	var guestName = userNames.getGuestName(client);
 userData.name=guestName;
 
-
+	 userHeader={
+		 "name":guestName,
+		 "imageUrl":""
+	 };
 
 	console.log("userlist: " +JSON.stringify(userNames.get()));
 
@@ -131,6 +136,11 @@ userData.name=guestName;
      userData.name=data.name;
      userNames.changeName(data);
      client.emit('send:init',userData);
+	 //io.socket.emit('send:userImageUrl',{"name":data.name,"imageUrl":data.imageUrl});
+
+	userHeader.name=data.name;
+	userHeader.imageUrl=data.imageUrl;
+	 //client.emit('send:userHeader',userHeader);
      io.sockets.emit('send:userlist',userNames.get());
 
      result=true;
@@ -157,6 +167,7 @@ userData.name=guestName;
     io.sockets.emit('send:userlist',userNames.get());
   });
   //whole list of users
-
+  console.log(userHeader);
+	client.emit('send:userHeader',userHeader);
   io.sockets.emit('send:userlist',userNames.get());
 }

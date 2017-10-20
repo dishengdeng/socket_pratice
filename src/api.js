@@ -47,10 +47,10 @@ function receviceNameChange(fn)
 	socket.on('send:changeName', data=>fn(data));
 }
 
-function updateName(data)
+function updateName(name,imageUrl)
 {
 	console.log("client send: "+socket.id);
-	socket.emit('send:changeName', {"name":data,"socketID":socket.id});
+	socket.emit('send:changeName', {"name":name,"imageUrl":imageUrl,"socketID":socket.id});
 }
 
 function receviceImageUrl(fn)
@@ -59,4 +59,10 @@ function receviceImageUrl(fn)
 	socket.on('send:userImageUrl', data=>fn(data));
 }
 
-export { subscribeToTimer, receviceMassge, sendMassge, receviceUserData, receviceInitMassge, receviceUserList, receviceNameChange, updateName, receviceImageUrl}
+function receviceUserHeader(fn)
+{
+
+	socket.on('send:userHeader', data=>fn(null,data));
+}
+
+export { subscribeToTimer, receviceMassge, sendMassge, receviceUserData, receviceInitMassge, receviceUserList, receviceNameChange, updateName, receviceImageUrl, receviceUserHeader}
